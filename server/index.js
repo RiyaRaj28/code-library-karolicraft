@@ -1,12 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const cors = require('cors'); 
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
 dotenv.config();
+app.use(cors());
 
 const snippetRoutes = require('./routes/snippetRoutes');
 const searchRoutes = require('./routes/searchRoutes');
@@ -17,6 +19,7 @@ app.use('/api/search', searchRoutes);
 app.use('/auth/admin', authRoutes);
 
 // Connect to MongoDB
+console.log(process.env.MONGO_URI)
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
         console.log('Connected to MongoDB');

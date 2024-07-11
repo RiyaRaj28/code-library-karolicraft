@@ -10,30 +10,35 @@ const User = require('../models/userModel');
 require('dotenv').config(); 
 
 const login = (req, res) => {
-    const { type , password } = req.body;
-
-    if (type === 'admin' && password === process.env.ADMIN_PASSWORD) {
-        res.status(200).json({ message: 'Successful login', redirectUrl: '/api/search/getFeaturedSnippets' });
-    } else {
-        res.status(401).json({ message: 'Invalid username or password' });
+    const { password ,email} = req.body;
+    console.log("Radharani@123"===password.toString(),password.toString())
+    if (email === 'riyaleadingabhiworking@gmail.com' && password === "Radharani@123") {
+        res.status(200).json({ message: 'Successful login', type :"admin",token:"staylogin"});
+    }else if(email === 'user@gmail.com' && password === process.env.USER_PASSWORD){
+        res.status(200).json({ message: 'Successful login', type :"user",token:"staylogin"});
+    }
+    else {
+        res.status(500).json({ message: 'Invalid username or password' });
     }
 };
 
+
+
 const logout = (req, res) => {
-    //logout logic 
+    
     res.status(200).json({ message: 'Logout successful' });
 };
 
 const addAdminUser = async (req, res) => {
     const admin = new User(req.body);
-    const { type } = req.body;
+    const {email,password } = req.body;
 
-    if (req.body.type !== 'admin') {
-        return res.status(400).json({
-            success: false,
-            message: 'User must be of type admin'
-        });
-    }
+    // if (req.body.type !== 'admin') {
+    //     return res.status(400).json({
+    //         success: false,
+    //         message: 'User must be of type admin'
+    //     });
+    // }
 
     try {
         await admin.save();
