@@ -1,19 +1,23 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
+dotenv.config();
 
 const snippetRoutes = require('./routes/snippetRoutes');
-// const userRoutes = require('./routes/userRoutes');
+const searchRoutes = require('./routes/searchRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 app.use('/api/snippet', snippetRoutes);
-// app.use('/api/users', userRoutes);
+app.use('/api/search', searchRoutes);
+app.use('/auth/admin', authRoutes);
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost/mydatabase', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGO_URI)
     .then(() => {
         console.log('Connected to MongoDB');
     })
