@@ -16,10 +16,11 @@ const AddSnippet = () => {
   const handleSave = async (e) => {
     e.preventDefault();
     const formData = {
+      featured,
       title,
       description,
       code,
-      selectImg,
+      image:selectImg,
       language,
     };
     console.log(formData);
@@ -42,7 +43,7 @@ const AddSnippet = () => {
 
   return (
 
-    <div className="p-8 w-3/4 ">
+    <div className="p-8 w-3/4 min-h-full max-h-full overflow-auto ">
       <h1 className="text-2xl text-black mb-4 font-semibold">Add Snippet</h1>
       <form >
         <div className='flex flex-col pb-2 '>
