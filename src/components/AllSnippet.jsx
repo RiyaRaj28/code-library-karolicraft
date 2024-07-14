@@ -66,12 +66,36 @@ function AllSnippet() {
     }
   };
 
+  const handlefeatured = async (id) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:3000/api/search/handleFeaturedSnippets/${id}`
+      );
+
+      if (response) {
+        try {
+          const response = await axios.get(
+            `http://localhost:3000/api/snippet/allsnippets`
+          );
+          console.log(response, "hhh");
+          if (response) {
+            setData(response.data);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div className="flex flex-col w-[95%] m-10 h-screen">
-      <h1 className="text-2xl text-black pb-4 ">All Snippet</h1>
-      <table className="table-auto w-full text-left">
+    <div className="flex flex-col w-full px-5 min-h-full max-h-full overflow-auto">
+      <h1 className="text-2xl font-medium text-black py-4 ">All Snippet</h1>
+      <table className="table-auto w-full  text-left">
         <thead>
-          <tr className="bg-yellow-400 text-center text-black-100 text-md font-medium uppercase tracking-wider">
+          <tr className="bg-yellow-400 text-center  text-black-100 text-md font-medium uppercase tracking-wider">
             <th className="px-4 py-2">Sl. No.</th>
             <th className="px-4 py-2">Title</th>
             <th className="px-4 py-2">Description</th>
@@ -120,11 +144,16 @@ function AllSnippet() {
 
                 {item?.featured ? (
                   <FaStar
+                    onClick={() => handlefeatured(item?._id)}
                     size={20}
                     className="hover:scale-125 fill-green-500"
                   />
                 ) : (
-                  <FaStar className="" size={20} />
+                  <FaStar
+                    onClick={() => handlefeatured(item?._id)}
+                    className=""
+                    size={20}
+                  />
                 )}
               </td>
             </tr>
