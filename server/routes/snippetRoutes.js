@@ -10,11 +10,13 @@ router.post(
   upload.single("image"),
   snippetController.addSnippet
 );
+
 router.put(
   "/allsnippets/:snippetId",
   upload.single("image"),
   snippetController.updateSnippet
 );
+
 router.delete("/allsnippets/:snippetId", snippetController.deleteSnippet);
 router.get("/searchSnippet", snippetController.searchSnippet);
 router.get("/getsnippetsbylanguage", snippetController.getSnippetsByLanguage);
