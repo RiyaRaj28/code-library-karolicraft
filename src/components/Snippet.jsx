@@ -1,25 +1,29 @@
-import React from 'react'
-import CodeDisplay from './CodeDisplay'
-
+import React from "react";
+import CodeDisplay from "./CodeDisplay";
+import { useLocation } from "react-router-dom";
 function Snippet() {
+  const location = useLocation();
+  const item = location.state?.item;
   return (
-    <div className='flex flex-col h-50vh w-3/4 m-5'>
-      <div className='py-3 pl-4  font-bold text-2xl shadow-md box-border' >Heading</div>
-      <div className='grid grid-cols-2 gap-5'>
-        <div className='border'>
+    <div className="flex flex-col  h-[90%] overflow-auto w-[95%] m-5">
+      <div className="py-3 pl-4  font-bold text-2xl shadow-md box-border">
+        {item?.title}
+      </div>
+      <div className="flex w-full flex-col justify-center gap-5">
+        <div className=" w-full">
           <img
             alt="Snippet Image"
-            className="w-full  aspect-square object-cover"
-            height="200"
-            src="../src/assets/placeholder.png"
-            width="200"
-          /></div>
-        <div className='border row-span-2'><CodeDisplay /></div>
-        <div className='border px-5'>Description: Lorem, ipsum dolor sit amet consectetur adipisicing elit. Hic saepe dolor, tempore fugit recusandae, nihil fuga consequuntur perferendis unde ducimus reprehenderit, sequi cupiditate sunt voluptatem at officiis provident? Doloribus vero numquam fugit velit qui libero enim quia esse. Aliquid, exercitationem. Impedit, nobis doloremque! Eaque praesentium vero neque libero consequuntur! Nesciunt. </div>
+            className=" bg-cover w-full h-64 aspect-square object-cover"
+            src={item.image}
+          />
+        </div>
+        <div className="border w-full row-span-2">
+          <CodeDisplay code={item?.code} />
+        </div>
+        <div className="border w-full h-32 px-5">{item?.description}</div>
       </div>
-    </div >
-
-  )
+    </div>
+  );
 }
 
-export default Snippet
+export default Snippet;

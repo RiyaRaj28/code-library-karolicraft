@@ -29,7 +29,7 @@ const router = createBrowserRouter(
       <Route path="snippet" element={<Snippet />} />
       <Route path="addsnippet" element={<AddSnippet />} />
       <Route path="codedisplay" element={<CodeDisplay />} />
-      <Route path="editsnippet" element={<EditSnippet />} />
+      <Route path="editsnippet/:id" element={<EditSnippet />} />
       <Route path="allsnippet" element={<AllSnippet />} />
     </Route>
   )

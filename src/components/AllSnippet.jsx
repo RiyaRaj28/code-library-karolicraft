@@ -1,68 +1,77 @@
-import React from 'react'
-import { useState } from 'react';
-import { Link } from 'react-router-dom'
-import Modal from './Modal';
+import React, { useEffect } from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import Modal from "./Modal";
 import { FaInfo, FaEdit, FaWindowClose, FaStar } from "react-icons/fa";
+import axios from "axios";
+import { IoEye } from "react-icons/io5";
+import { toast } from "react-toastify";
 
 function AllSnippet() {
-  const arr = [{
-    id: 1,
-    title: "Navbar",
-    description: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sed, delectus provident perferendis ipsum quaerat molestias at dolor quisquam. Quidem adipisci exercitationem aperiam fugiat iste magni qui, soluta rerum eius molestias voluptatibus ipsam? Natus sequi, totam nulla sed, fuga necessitatibus, tenetur adipisci quia perspiciatis reprehenderit nemo eligendi. Optio animi quidem expedita consequuntur mollitia itaque culpa, eveniet rerum maxime porro architecto, inventore dolorem quas sequi voluptate cumque minima vitae dolor libero deserunt!",
-    image: '../src/assets/placeholder.png',
-    type: "Javascript",
-    feature: true
-  }, {
-    id: 2,
-    title: "Sidebar",
-    description: "elit. Sed, delectus provident perferendis ipsum quaerat molestias at dolor quisquam. Quidem adipisci exercitationem aperiam fugiat iste magni qui, soluta rerum eius molestias voluptatibus ipsam? Natus sequi, totam nulla sed, fuga necessitatibus, tenetur adipisci quia perspiciatis reprehenderit nemo eligendi. Optio animi quidem expedita consequuntur mollitia itaque c",
-    image: '../src/assets/placeholder.png',
-    type: "CSS",
-    feature: false
-  }, {
-    id: 3,
-    title: "Hero page",
-    description: "Sed, delectus provident perferendis ipsum quaerat molestias at dolor quisquam. Quidem adipisci exercitationem aperiam fugiat iste magni qui, soluta rerum eius molestias voluptatibus ipsam? Natus sequi, totam nulla sed, fuga necessitatibus, tenetur adipisci quia perspiciatis reprehenderit nemo eligendi.",
-    image: '../src/assets/placeholder.png',
-    type: "HTML",
-    feature: false
-  }, {
-    id: 4,
-    title: "Footer",
-    description: " ipsam? Natus sequi, totam nulla sed, fuga necessitatibus, tenetur adipisci quia perspiciatis reprehenderit nemo eligendi. Optio animi quidem expedita consequuntur mollitia itaque culpa, eveniet rerum maxime porro architecto, inventore dolorem quas sequi voluptate cumque minima vitae dolor libero deserunt",
-    image: '../src/assets/placeholder.png',
-    type: "Java",
-    feature: true
-  }]
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState('');
-  const [data, setData] = useState(arr)
-  const [id,setId] = useState()
-  const openModal = (content,id) => {
+  const [modalContent, setModalContent] = useState("");
+  const [data, setData] = useState([]);
+  const [title, setTitle] = useState();
+  const openModal = (title, content) => {
     setModalContent(content);
-    setId(id)
+    setTitle(title);
     setIsModalOpen(true);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/snippet/allsnippets`
+        );
+        console.log(response, "hhh");
+        if (response) {
+          setData(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   const closeModal = () => {
     setIsModalOpen(false);
-    setModalContent('');
+    setModalContent("");
   };
 
-  console.log(data)
-  const handleDelete = (id) => {
-    const newarray = data
-    const modarr = newarray.filter((i) => i.id != id)
-    setData(modarr)
-  }
+  console.log(data);
+  const handleDelete = async (id) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/api/snippet/allsnippets/${id}`
+      );
+      console.log(response, "delte");
+      if (response) {
+        toast.success("Deleted SuccessFully");
+        try {
+          const response = await axios.get(
+            `http://localhost:3000/api/snippet/allsnippets`
+          );
+          console.log(response, "hhh");
+          if (response) {
+            setData(response.data);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-    <div className="flex flex-col w-3/4 m-10 h-screen">
+    <div className="flex flex-col w-[95%] m-10 h-screen">
       <h1 className="text-2xl text-black pb-4 ">All Snippet</h1>
       <table className="table-auto w-full text-left">
         <thead>
-          <tr className="bg-yellow-400 text-black-100 text-md font-medium uppercase tracking-wider">
+          <tr className="bg-yellow-400 text-center text-black-100 text-md font-medium uppercase tracking-wider">
             <th className="px-4 py-2">Sl. No.</th>
             <th className="px-4 py-2">Title</th>
             <th className="px-4 py-2">Description</th>
@@ -72,30 +81,66 @@ function AllSnippet() {
           </tr>
         </thead>
         <tbody>
-          {data.map((item) => (
-            <tr key={item.id} className="border text-sm border-gray-200 hover:bg-gray-100">
-              <td className="px-4 py-2">{item.id}</td>
-              <td className="px-4 py-2">{item.title}</td>
-              <td className="px-4 py-2 cursor-pointer" onClick={() => openModal('description',item.id)}>{item.description.slice(0, 50)}...</td>
-              <td className="px-4 py-2 cursor-pointer"><FaInfo className='hover:scale-125' onClick={() => openModal('image',item.id)}
-              /></td>
-              <td className="px-4 py-2">{item.type}</td>
-              <td className="py-2 flex space-x-6 cursor-pointer">
-                <Link to="/editsnippet"><FaEdit className='hover:scale-125' /></Link>
-                <FaWindowClose className='hover:scale-125' onClick={() => handleDelete(item.id)} />
+          {data?.map((item, index) => (
+            <tr
+              key={item._id}
+              className="border text-sm border-gray-200 hover:bg-gray-100 text-center"
+            >
+              <td className="px-4 py-2">{index + 1}</td>
+              <td
+                className="px-4 py-2"
+                onClick={() => openModal("Title", item?.title)}
+              >
+                {item?.title.slice(0, 10)}
+              </td>
+              <td
+                className="px-4 py-2 cursor-pointer"
+                onClick={() => openModal("Description", item?.description)}
+              >
+                {item?.description.slice(0, 20)}...
+              </td>
+              <td className="px-4 py-2 flex justify-center items-center cursor-pointer">
+                <IoEye
+                  size={20}
+                  color="blue"
+                  className=""
+                  onClick={() => openModal("image", item?.image)}
+                />
+              </td>
+              <td className="px-4 py-2">{item?.language}</td>
+              <td className="py-2  space-x-6 flex justify-center items-center  cursor-pointer">
+                <Link to={`/editsnippet/${item?._id}`}>
+                  <FaEdit size={20} className="" />
+                </Link>
+                <FaWindowClose
+                  size={20}
+                  className=""
+                  onClick={() => handleDelete(item?._id)}
+                />
 
-                {(item.feature) ? <FaStar className='hover:scale-125 fill-green-500' /> : <FaStar className='hover:scale-125' />}
-
+                {item?.featured ? (
+                  <FaStar
+                    size={20}
+                    className="hover:scale-125 fill-green-500"
+                  />
+                ) : (
+                  <FaStar className="" size={20} />
+                )}
               </td>
             </tr>
-
           ))}
-
         </tbody>
       </table>
-      {isModalOpen && <Modal data={data} id={id} content={modalContent} closeModal={closeModal} />}
-    </div >
-  )
+      {isModalOpen && (
+        <Modal
+          data={data}
+          title={title}
+          content={modalContent}
+          closeModal={closeModal}
+        />
+      )}
+    </div>
+  );
 }
 
-export default AllSnippet
+export default AllSnippet;

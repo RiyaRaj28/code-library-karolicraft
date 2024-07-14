@@ -14,7 +14,7 @@ const login = (req, res) => {
     console.log("Radharani@123"===password.toString(),password.toString())
     if (email === 'riyaleadingabhiworking@gmail.com' && password === "Radharani@123") {
         res.status(200).json({ message: 'Successful login', type :"admin",token:"staylogin"});
-    }else if(email === 'user@gmail.com' && password === process.env.USER_PASSWORD){
+    }else if(email === 'user@gmail.com' && password === "user@123"){
         res.status(200).json({ message: 'Successful login', type :"user",token:"staylogin"});
     }
     else {

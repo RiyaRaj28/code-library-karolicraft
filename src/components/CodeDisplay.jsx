@@ -9,7 +9,7 @@ import { MdContentCopy } from "react-icons/md";
 const CodeDisplay = ({ code }) => {
   //   const [code, setCode] = useState('');
   const [copied, setCopied] = useState(false);
-
+ 
   //   useEffect(() => {
   //     const fetchCode = async () => {
   //       try {
