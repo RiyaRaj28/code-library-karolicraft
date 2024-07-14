@@ -3,68 +3,48 @@
 // - [x]  #6 /home/:titleId - get - filter by titleId
 
 // ## Search APIs
-// - [x]  #7 /search - get -> getAllSnippets 
+// - [x]  #7 /search - get -> getAllSnippets
 // - [x]  #8 /search/:languageId - get - filter by languageId
 // - [x]  #9 /search/:titleId - get - filter by titleId -> getSnippetByTitle
 
-const Snippet = require('../models/snippetModel');
+const Snippet = require("../models/snippetModel");
 
-const getFeaturedSnippets = async (req, res) => {
-    try {
-        const snippets = await Snippet.find({ featured: true });
-        if (!snippets) {
-            return res.status(404).json({ message: "No featured snippets found" });
-        }
+const handleFeaturedSnippets = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-        const snippetCount = snippets.length;
+    const snippet = await Snippet.findById(id);
 
-        // Return the snippets and the count as the response
-        res.json({ snippets, count: snippetCount });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Internal Server Error" });
+    if (!snippet) {
+      return res.status(400).json({ message: "Snippet not found" });
     }
+
+    snippet.featured = !snippet.featured;
+    await snippet.save();
+    return res.status(200).json({ message: "snippet featured update" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 };
 
 const getSnippetByTitle = async (req, res) => {
-    try {
-        const { title } = req.body;
-        const snippet = await Snippet.findOne({ title });
+  try {
+    const { title } = req.body;
+    const snippet = await Snippet.findOne({ title });
 
-        if (!snippet) {
-            return res.status(404).json({ message: "Snippet not found" });
-        }
-
-        res.json(snippet);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Internal Server Error" });
+    if (!snippet) {
+      return res.status(404).json({ message: "Snippet not found" });
     }
+
+    res.json(snippet);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 };
 
-const getSnippetsByLanguage = async (req, res) => {
-    try {
-        const { language } = req.body;
-        const snippets = await Snippet.find({ language });
-
-        const snippetCount = snippets.length;
-
-        if (snippetCount === 0) {
-            return res.status(404).json({ message: "No snippets found in this langauge" });
-        }
-
-        // Return the snippets and the count as the response
-        res.json({ snippets, count: snippetCount });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Internal Server Error" });
-    }
+module.exports = {
+  handleFeaturedSnippets,
+  getSnippetByTitle,
 };
-
-module.exports = { 
-    getFeaturedSnippets,
-    getSnippetByTitle,
-    getSnippetsByLanguage,
-};
-
-
