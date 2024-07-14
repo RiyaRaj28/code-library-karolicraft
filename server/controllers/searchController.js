@@ -2,7 +2,6 @@
 // - [x]  #5 /home - getAll - filter by featured true or false
 // - [x]  #6 /home/:titleId - get - filter by titleId
 
-
 // ## Search APIs
 // - [x]  #7 /search - get -> getAllSnippets 
 // - [x]  #8 /search/:languageId - get - filter by languageId
