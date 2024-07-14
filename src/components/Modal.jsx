@@ -1,5 +1,5 @@
 // Define the Modal component inside the component... Need to refactor
-const Modal = ({ data, content, closeModal,id }) => {
+const Modal = ({ data, content, closeModal,title }) => {
   console.log(data)
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -10,12 +10,13 @@ const Modal = ({ data, content, closeModal,id }) => {
         >
           ❌
         </button>
-        {content === 'image' && <img
-          src={data[id].image} width="312px"
+        <h1 className="font-bold text-2xl">{title}</h1>
+         { content.includes("http")  ? <img
+          src={content} width="312px"
           height="200px"
           alt='snippet image'
-          className='object-contain max-h-[200px] border border-black rounded-md mt-3' />}
-        {content === 'description' && <div className='text-sm w-80 h-40 overflow-y-scroll'>{data[id-1].description}</div>}
+          className='object-contain max-h-[200px] border border-black rounded-md mt-3' />:
+        <div style={{overflowWrap:"anywhere"}} className='text-sm  w-80 h-auto'>{content}</div>}
       </div>
     </div>
   );

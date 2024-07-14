@@ -52,7 +52,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen w-[80%] flex items-center justify-center bg-gradient-to-l from-yellow-400 via-yellow-300 to-white">
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-l from-yellow-400 via-yellow-300 to-white">
       <div className="bg-white p-8 rounded-lg shadow-2xl w-96">
         <h2 className="text-3xl font-bold mb-6 text-center text-yellow-600">Code Library Login</h2>
         <form onSubmit={handleSubmit} className="space-y-4">

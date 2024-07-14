@@ -1,47 +1,29 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const snippetSchema = new mongoose.Schema({
-    title:
-    {
-        type: String, 
-        required: true 
+const snippetSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
     },
-    description: 
-    { 
-        type: String, 
-        required: true 
+    description: {
+      type: String,
     },
-    code: 
-    { 
-        type: String, 
-        required: true 
+    code: {
+      type: String,
     },
-    featured: 
-    { 
-        type: Boolean,
-        default: false 
+    featured: {
+      type: Boolean,
     },
-    language: 
-    { 
-        type: String, 
-        required: true 
+    language: {
+      type: String,
     },
-    createdAt: { 
-        type: Date, 
-        default: Date.now 
+    image: {
+      type: String,
     },
-    updatedAt: 
-    { 
-        type: Date, 
-        default: Date.now 
-    },
-    image: 
-    { 
-        type: String 
-    }
-});
+  },
+  { timestamps: true }
+);
 
-const Snippet = mongoose.model('snippet', snippetSchema);
+const Snippet = mongoose.model("snippet", snippetSchema);
 
-module.exports = Snippet; 
-
+module.exports = Snippet;
